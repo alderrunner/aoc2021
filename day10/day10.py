@@ -37,7 +37,19 @@ def solve1(inp):
 
     return sum([points_per_bracket[char] for char in ill_char])
 
+def median(a):
+    a = sorted(a)
+
+    n = len(a)
+ 
+    # check for even case
+    if n % 2 != 0:
+        return int(a[n // 2])
+     
+    return int((a[int((n-1)/2)] + a[int(n / 2)])/2.0)
+
 def solve2(inp):
+    points_per_bracket = {')': 1, ']': 2, '}': 3, '>': 4}
     brackets = {'(': ')', '[': ']', '{': '}', '<': '>'}
     ill_lines = []
 
@@ -65,7 +77,32 @@ def solve2(inp):
     for i in ill_lines:
         inp.pop(i)
     
-    pass
+    all_scores = []
+    
+    for line in inp:
+        open_br = []
+        looking_for = []
+
+        for char in line:
+            if char in brackets.keys():
+                open_br.append(char)
+                looking_for.append(brackets[char])
+            else:
+                if char == looking_for[-1]:
+                    open_br.pop()
+                    looking_for.pop()
+        
+        looking_for = looking_for[::-1]
+        
+        total_score = 0
+
+        for char in looking_for:
+            total_score += points_per_bracket[char]
+            total_score *= 5
+        
+        all_scores.append(total_score // 5)
+    
+    return median(all_scores)
 
 
 path = "day10/day10_input.txt"
