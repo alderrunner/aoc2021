@@ -12,7 +12,6 @@ def read(path: str):
 
 
 def solve1(inp):
-    # inp = [['{', '(', ')', ']']]
     points_per_bracket = {')': 3, ']': 57, '}': 1197, '>': 25137}
     brackets = {'(': ')', '[': ']', '{': '}', '<': '>'}
     ill_char = []
