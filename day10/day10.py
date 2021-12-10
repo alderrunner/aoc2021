@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-from io import open_code
 from time import perf_counter as pfc
 
 
@@ -12,42 +11,21 @@ def read(path: str):
 
 
 def solve1(inp):
-    # inp = [['{', '(', ')', ']']]
     points_per_bracket = {')': 3, ']': 57, '}': 1197, '>': 25137}
     brackets = {'(': ')', '[': ']', '{': '}', '<': '>'}
-    ill_char = []
+    error_score = 0
 
     for line in inp:
-        open_br = []
-        looking_for = []
-
         for i, char in enumerate(line):
-            if i == 0 and char in brackets.keys():
-                open_br.append(char)
-                looking_for.append(brackets[char])
-                continue
-            elif i == 0 and char in brackets.items():
-                break
-            
-            if char in brackets.keys():
-                open_br.append(char)
-                looking_for.append(brackets[char])
-            else:
-                if char == looking_for[-1]:
-                    open_br.pop()
-                    looking_for.pop()
-                else:
-                    ill_char.append(char)
-                    break
-            
+            pass
     
-    return sum([points_per_bracket[char] for char in ill_char])
+    return error_score
 
 def solve2(inp):
     pass
 
 
-path = "day10/day10_input.txt"
+path = "day10/day10_sample.txt"
 inp1 = read(path)
 inp2 = read(path)
 
