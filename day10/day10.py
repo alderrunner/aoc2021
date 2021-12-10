@@ -50,11 +50,7 @@ def solve2(inp):
         looking_for = []
 
         for j, char in enumerate(line):
-            if j == 0 and char in brackets.keys():
-                open_br.append(char)
-                looking_for.append(brackets[char])
-                continue
-            elif j == 0 and char in brackets.items():
+            if j == 0 and char in brackets.items():
                 break
             
             if char in brackets.keys():
@@ -76,7 +72,7 @@ def solve2(inp):
     pass
 
 
-path = "day10/day10_sample.txt"
+path = "day10/day10_input.txt"
 inp1 = read(path)
 inp2 = read(path)
 
