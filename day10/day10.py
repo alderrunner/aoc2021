@@ -38,15 +38,45 @@ def solve1(inp):
                 else:
                     ill_char.append(char)
                     break
-            
-    
+
     return sum([points_per_bracket[char] for char in ill_char])
 
 def solve2(inp):
+    brackets = {'(': ')', '[': ']', '{': '}', '<': '>'}
+    ill_lines = []
+
+    for i, line in enumerate(inp):
+        open_br = []
+        looking_for = []
+
+        for j, char in enumerate(line):
+            if j == 0 and char in brackets.keys():
+                open_br.append(char)
+                looking_for.append(brackets[char])
+                continue
+            elif j == 0 and char in brackets.items():
+                break
+            
+            if char in brackets.keys():
+                open_br.append(char)
+                looking_for.append(brackets[char])
+            else:
+                if char == looking_for[-1]:
+                    open_br.pop()
+                    looking_for.pop()
+                else:
+                    ill_lines.append(i)
+                    break
+    
+    ill_lines.sort(reverse=True)
+
+    for i in ill_lines:
+        inp.pop(i)
+    
     pass
 
 
-path = "day10/day10_input.txt"
+path = "day10/day10_sample.txt"
 inp1 = read(path)
 inp2 = read(path)
 
