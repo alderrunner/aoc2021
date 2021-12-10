@@ -21,11 +21,7 @@ def solve1(inp):
         looking_for = []
 
         for i, char in enumerate(line):
-            if i == 0 and char in brackets.keys():
-                open_br.append(char)
-                looking_for.append(brackets[char])
-                continue
-            elif i == 0 and char in brackets.items():
+            if i == 0 and char in brackets.items():
                 break
             
             if char in brackets.keys():
