@@ -39,10 +39,31 @@ def solve1(inp):
 
 
 def solve2(inp):
-    pass
+    def dfs(cur, seen, dup):
+        if cur == 'end':
+            return 1
+        
+        if cur == 'start' and seen:
+            return 0
+        
+        if cur.islower() and cur in seen:
+            if dup is None:
+                dup = cur
+            else:
+                return 0
+
+        seen = seen | {cur}
+        out = 0
+
+        for thing in inp[cur]:
+            out += dfs(thing, seen, dup)
+
+        return out
+    
+    return dfs('start', set(), None)
 
 
-path = "day12/day12_sample.txt"
+path = "day12/day12_input.txt"
 inp1 = read(path)
 inp2 = read(path)
 
