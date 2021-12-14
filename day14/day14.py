@@ -16,6 +16,7 @@ def read(path: str):
 
 
 def solve1(inp):
+    # O(3*2^steps)
     template = inp[0]
     rules = inp[1]
 
@@ -42,7 +43,42 @@ def solve1(inp):
 
 
 def solve2(inp):
-    pass
+    template = inp[0]
+    rules = inp[1]
+
+    pair_occurrences = {pair: 0 for pair in rules.keys()}
+
+    for i, element in enumerate(template):
+        if i+1 >= len(template):
+            break
+
+        pair = element + template[i+1]
+        pair_occurrences[pair] += 1
+    
+    all_elements = ''.join(set(rules.keys()))
+    count = Counter(all_elements)
+
+    for key in count.keys():
+        count[key] = 0
+        
+    for elem in template:
+        count[elem] += 1
+
+    for _ in range(40):
+        pair_occurrences_copy = pair_occurrences.copy()
+
+        for i, pair in enumerate(pair_occurrences_copy.keys()):
+            if pair_occurrences_copy[pair] == 0:
+                continue
+
+            rule = rules[pair]
+            count[rule] += 1*pair_occurrences_copy[pair]
+
+            pair_occurrences[pair] -= 1*pair_occurrences_copy[pair]
+            pair_occurrences[pair[0]+rule] += 1*pair_occurrences_copy[pair]
+            pair_occurrences[rule+pair[1]] += 1*pair_occurrences_copy[pair]
+    
+    return max(count.values()) - min(count.values())
 
 
 path = "day14/day14_input.txt"
