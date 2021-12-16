@@ -4,7 +4,7 @@
 
 from time import perf_counter as pfc
 from collections import defaultdict
-from queue import PriorityQueue
+import heapq
 import math
 
 
@@ -13,11 +13,11 @@ def read(path: str):
         lines =  my_file.read().rstrip().splitlines()
 
         adj = defaultdict(list)
-        dist = defaultdict(int)
+        weights = defaultdict(int)
 
         for i, line in enumerate(lines):
             for j, num in enumerate(line):
-                dist[(i, j)] = int(num)
+                weights[(i, j)] = int(num)
 
                 if i-1 >= 0:
                     adj[(i,j)].append((i-1,j))
@@ -28,63 +28,48 @@ def read(path: str):
                 if j+1 < len(line):
                     adj[(i,j)].append((i,j+1))
         
-        return adj, dist
+        return adj, weights
 
 
-def extract_min(queue, D):
-    min_d = math.inf
-    min_vertex = None
+def lazy_dijkstra(adj: dict, weights: dict):
+    dist = {}
+    visited = {}
+    prev = {}
 
-    for vertex in queue:
-        if D[vertex] < min_d:
-            min_d = D[vertex]
-            min_vertex = vertex
-    
-    return min_vertex
+    for point in adj.keys():
+        dist[point] = float('inf')
+        visited[point] = False
+        prev[point] = None
+
+    dist[(0,0)] = 0
+    pq = [(0, (0,0))]
+
+    while len(pq) > 0:
+        _, curr_v = heapq.heappop(pq)
+
+        if curr_v == (int(math.sqrt(len(adj)))-1,int(math.sqrt(len(adj)))-1): break
+
+        if visited[curr_v]: continue
+
+        visited[curr_v] = True
+
+        for neighbor in adj[curr_v]:
+            if dist[curr_v] + weights[neighbor] < dist[neighbor]:
+                dist[neighbor] = dist[curr_v] + weights[neighbor]
+                prev[neighbor] = curr_v
+                heapq.heappush(pq, (dist[neighbor],neighbor))
+
+    return dist, prev
 
 
 def solve1(inp):
     adj: dict = inp[0]
     dist = inp[1]
 
-    path_dist = 0
-
-    queue = PriorityQueue()
-    prev: dict = {}
-    D = defaultdict(int)
-    visited = []
-
-    for vertex in adj.keys():
-        queue.put((math.inf, vertex))
-        prev[vertex] = None
-        D[vertex] = math.inf
+    dist, _ = lazy_dijkstra(adj, dist)
     
-    D[(0,0)] = 0
-    queue.put((0, (0,0)))
+    return dist[int(math.sqrt(len(adj)))-1,int(math.sqrt(len(adj)))-1]
 
-    while not queue.empty():
-        curr_v = queue.get()[1]
-        visited.append(curr_v)
-
-        if curr_v == (math.sqrt(len(adj))-1,math.sqrt(len(adj))-1):
-            break
-
-        for neighbor in set(adj[curr_v]).difference(visited):
-            if D[curr_v] + dist[neighbor] < D[neighbor]:
-                D[neighbor] = D[curr_v] + dist[neighbor]
-                prev[neighbor] = curr_v
-                queue.put((D[neighbor], neighbor))
-    
-    path = []
-    u = (math.sqrt(len(adj))-1,math.sqrt(len(adj))-1)
-    while u is not None:
-        path.insert(0, u)
-        u = prev[u]
-    
-    for vertex in path[1:]:
-        path_dist += dist[vertex]
-    
-    return path_dist
 
 def solve2(inp):
     pass
